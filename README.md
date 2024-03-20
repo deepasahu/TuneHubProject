@@ -1,0 +1,1 @@
+This is a FullStack web music application in which user can access the songs after purchasing the premium feature and also admin can add the song manually. And I used the laguanges as java, springboot, html,css,javascripy(all in thymeleaf), MySql ,..etc
