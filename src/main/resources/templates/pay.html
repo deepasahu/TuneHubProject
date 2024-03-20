@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+
+<title>Premium</title>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+
+<style>
+body {
+	background-image:
+		url('https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+	/* Change 'your_background_image.jpg' to the path of your image */
+	background-size: cover;
+	/* Ensures the background image covers the entire body */
+	background-repeat: no-repeat;
+	/* Prevents the background image from repeating */
+	background-position: center; /* Centers the background image */
+	margin: 0; /* Removes default body margin */
+	padding: 0; /* Removes default body padding */
+	font-family: Arial, sans-serif; /* Fallback font family */
+}
+
+.links-container {
+	margin-top: 100px; /* Adjust as needed to position the table */
+	text-align: center; /* Centers the content horizontally */
+	color: white; /* Sets the text color */
+}
+
+table {
+	margin: 0 auto; /* Centers the table horizontally */
+	background-color: rgba(0, 0, 0, 0.7);
+	/* Adds a semi-transparent black background to the table */
+	border-collapse: collapse; /* Collapses table borders */
+	border: 2px solid white; /* Adds a white border to the table */
+	color: white; /* Sets the text color */
+}
+
+th, td {
+	padding: 10px; /* Adds padding to table cells */
+}
+
+h1 {
+	color: white; /* Sets the color of the h1 text */
+}
+
+	
+        
+</style>
+
+
+</head>
+<body>
+<center>
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+	<div>
+
+		<h1>Explore Premium</h1>
+
+
+		<form id="payment-form">
+		<button type="submit" class="buy-button" style="width: 200px; height: 50px;" "font-size: 20px;">BUY</button>	
+		</form>
+
+	</div>
+	
+	</center>
+
+	<script>
+$(document).ready(function() {
+    $(".buy-button").click(function(e) {
+        e.preventDefault();
+        var form = $(this).closest('form');
+        
+        
+        createOrder();
+    });
+});
+
+function createOrder() {
+	
+    $.post("/createOrder")
+        .done(function(order) {
+            order = JSON.parse(order);
+            var options = {
+                "key": "rzp_test_iO7AgTpjgQSek5",
+                "amount": order.amount_due.toString(),
+                "currency": "INR",
+                "name": "Tune Hub",
+                "description": "Test Transaction",
+                "order_id": order.id,
+                "handler": function (response) {
+                    verifyPayment(response.razorpay_order_id, response.razorpay_payment_id, response.razorpay_signature);
+                },
+                "prefill": {
+                    "name": "Your Name",
+                    "email": "test@example.com",
+                    "contact": "9999999999"
+                },
+                "notes": {
+                    "address": "Your Address"
+                },
+                "theme": {
+                    "color": "#F37254"
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        })
+        .fail(function(error) {
+            console.error("Error:", error);
+        });
+}
+
+function verifyPayment(orderId, paymentId, signature) {
+     $.post("/verify", { orderId: orderId, paymentId: paymentId, signature: signature })
+         .done(function(isValid) {
+             if (isValid) {
+            	 alert("Payment successful");
+             	window.location.href = 'payment-success';
+             } else {
+                alert("Payment failed");
+             	window.location.href = 'payment-success';
+             }
+         })
+         .fail(function(error) {
+             console.error("Error:", error);
+         });
+}
+</script>
+</body>
+</html>

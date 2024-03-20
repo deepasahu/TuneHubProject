@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CUSTOMER HOME</title>
+
+
+
+<style>
+body {
+	background-image:
+		url('https://images.unsplash.com/photo-1614149162883-504ce4d13909?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+	/* Change 'your_background_image.jpg' to the path of your image */
+	background-size: cover;
+	/* Ensures the background image covers the entire body */
+	background-repeat: no-repeat;
+	/* Prevents the background image from repeating */
+	background-position: center; /* Centers the background image */
+	margin: 0; /* Removes default body margin */
+	padding: 0; /* Removes default body padding */
+	font-family: Arial, sans-serif; /* Fallback font family */
+}
+
+.links-container {
+	margin-top: 100px; /* Adjust as needed to position the table */
+	text-align: center; /* Centers the content horizontally */
+	color: white; /* Sets the text color */
+}
+
+table {
+	margin: 0 auto; /* Centers the table horizontally */
+	background-color: rgba(0, 0, 0, 0.7);
+	/* Adds a semi-transparent black background to the table */
+	border-collapse: collapse; /* Collapses table borders */
+	border: 2px solid white; /* Adds a white border to the table */
+	color: white; /* Sets the text color */
+}
+
+th, td {
+	padding: 10px; /* Adds padding to table cells */
+}
+
+h1 {
+	color: white; /* Sets the color of the h1 text */
+}
+</style>
+
+</head>
+<body>
+
+<center>
+<h1>Customer Home</h1>
+</center>
+
+<center>
+	
+	<br>
+
+	<!-- <form action="playsongs">
+	<input type="submit" value="PLAY SONGS">
+	 </form>-->
+
+	<div th:unless="${ispremium}" class="non-premium">
+		<form action="pay">
+			<input type="submit" value="GET PREMIUM">
+		</form>
+		<br>
+		<form action="logout">
+			<input type="submit" value="LOGOUT">
+		</form>
+	</div>
+
+	<div th:if="${ispremium}" class="premium">
+		<table border="1">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Artist</th>
+					<th>Genre</th>
+					<th>Play</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="s:${songs}">
+					<td th:text="${s.name}"></td>
+					<td th:text="${s.artist}"></td>
+					<td th:text="${s.genre}"></td>
+
+					<td><audio controls>
+							<source th:src="${s.link}">
+						</audio></td>
+
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+
+</center>
+</body>
+</html>
